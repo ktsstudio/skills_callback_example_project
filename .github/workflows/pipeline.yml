@@ -17,12 +17,7 @@ jobs:
       IMAGE_NAME_PREFIX: docker.pkg.github.com/ktsstudio/skills_callback_checker/task
       CALLBACK_TASK_ID: aa54e9cf-3598-45db-a65e-e95d03a029c0
     steps:
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@main
+      - run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} docker.pkg.github.com
       - run: docker pull ${{env.IMAGE_NAME_PREFIX}}-${{ env.CALLBACK_TASK_ID }}:latest
       - run: docker run --entrypoint /bin/bash --mount src="$(pwd)",target=/go/code/source,type=bind ${{env.IMAGE_NAME_PREFIX}}-${{ env.CALLBACK_TASK_ID }}:latest -c "mv build/main source && cd source && ./main"
