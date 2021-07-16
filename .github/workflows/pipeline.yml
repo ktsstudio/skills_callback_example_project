@@ -1,0 +1,22 @@
+name: Check homework
+on: [push]
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - run: pip install -r requirements.txt
+      - run: pytest tests
+  validate:
+    runs-on: ubuntu-latest
+    needs: pytest
+    env:
+      IMAGE_NAME_PREFIX: docker.pkg.github.com/ktsstudio/skills_callback_checker/task
+      CALLBACK_TASK_ID: aa54e9cf-3598-45db-a65e-e95d03a029c0
+    steps:
+      - uses: actions/checkout@main
+      - run: docker pull ${{env.IMAGE_NAME_PREFIX}}-{{ env.CALLBACK_TASK_ID }}:latest
+      - run: docker run --entrypoint /bin/bash --mount src="$(pwd)",target=/go/code/source,type=bind ${{env.IMAGE_NAME_PREFIX}}-${{ env.CALLBACK_TASK_ID }}:latest -c "mv build/main source && cd source && ./main"
