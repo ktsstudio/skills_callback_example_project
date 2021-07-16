@@ -18,5 +18,5 @@ jobs:
       CALLBACK_TASK_ID: aa54e9cf-3598-45db-a65e-e95d03a029c0
     steps:
       - uses: actions/checkout@main
-      - run: docker pull ${{env.IMAGE_NAME_PREFIX}}-{{ env.CALLBACK_TASK_ID }}:latest
+      - run: docker pull ${{env.IMAGE_NAME_PREFIX}}-${{ env.CALLBACK_TASK_ID }}:latest
       - run: docker run --entrypoint /bin/bash --mount src="$(pwd)",target=/go/code/source,type=bind ${{env.IMAGE_NAME_PREFIX}}-${{ env.CALLBACK_TASK_ID }}:latest -c "mv build/main source && cd source && ./main"
