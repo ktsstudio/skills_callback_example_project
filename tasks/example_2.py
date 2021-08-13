@@ -1,5 +1,4 @@
 class Dog:
     @staticmethod
-    def bark():
-        # write your code here
-        return None
+    def bark() -> str:
+        return 'gav'
