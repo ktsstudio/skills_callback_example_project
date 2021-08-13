@@ -3,9 +3,8 @@ on: [push]
 jobs:
   validate:
     runs-on: ubuntu-latest
-    needs: pytest
     env:
-      IMAGE: ktshub/backend-summer-2021:task-3abf1e6b-6d00-431d-b253-80d9cb4ce641
+      IMAGE: 'ktshub/backend-summer-2021:task-3abf1e6b-6d00-431d-b253-80d9cb4ce641'
     steps:
       - uses: actions/checkout@main
       - run: docker run --entrypoint /bin/bash --mount src="$(pwd)",target=/go/code/source,type=bind ${{ env.IMAGE }} -c "mv build/main source && cd source && ./main"
